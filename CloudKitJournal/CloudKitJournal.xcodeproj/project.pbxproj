@@ -18,6 +18,8 @@
 		9EFE0FDD243299EB000D8825 /* EntryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EFE0FDC243299EB000D8825 /* EntryController.swift */; };
 		9EFE0FE024329B58000D8825 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EFE0FDF24329B58000D8825 /* UIViewControllerExtension.swift */; };
 		9EFE0FE224329BDF000D8825 /* EntryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EFE0FE124329BDF000D8825 /* EntryError.swift */; };
+		9EFE0FE42432A18D000D8825 /* EntryListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EFE0FE32432A18D000D8825 /* EntryListTableViewController.swift */; };
+		9EFE0FE62432A1B8000D8825 /* EntryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EFE0FE52432A1B8000D8825 /* EntryDetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +37,8 @@
 		9EFE0FDC243299EB000D8825 /* EntryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryController.swift; sourceTree = "<group>"; };
 		9EFE0FDF24329B58000D8825 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
 		9EFE0FE124329BDF000D8825 /* EntryError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryError.swift; sourceTree = "<group>"; };
+		9EFE0FE32432A18D000D8825 /* EntryListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryListTableViewController.swift; sourceTree = "<group>"; };
+		9EFE0FE52432A1B8000D8825 /* EntryDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryDetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +123,8 @@
 		9EFE0FD52432900E000D8825 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				9EFE0FE32432A18D000D8825 /* EntryListTableViewController.swift */,
+				9EFE0FE52432A1B8000D8825 /* EntryDetailViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -222,10 +228,12 @@
 			files = (
 				85858B84242D081200C5ECA2 /* AppDelegate.swift in Sources */,
 				9EFE0FDB24329944000D8825 /* DateExtension.swift in Sources */,
+				9EFE0FE42432A18D000D8825 /* EntryListTableViewController.swift in Sources */,
 				9EFE0FDD243299EB000D8825 /* EntryController.swift in Sources */,
 				85858B86242D081200C5ECA2 /* SceneDelegate.swift in Sources */,
 				9EFE0FE224329BDF000D8825 /* EntryError.swift in Sources */,
 				9EFE0FE024329B58000D8825 /* UIViewControllerExtension.swift in Sources */,
+				9EFE0FE62432A1B8000D8825 /* EntryDetailViewController.swift in Sources */,
 				9EFE0FD82432903B000D8825 /* Entry.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
