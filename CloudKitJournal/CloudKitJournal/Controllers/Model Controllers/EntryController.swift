@@ -2,62 +2,51 @@
 //  EntryController.swift
 //  CloudKitJournal
 //
-//  Created by Zebadiah Watson on 3/26/20.
+//  Created by Chris Gottfredson on 3/30/20.
 //  Copyright © 2020 Zebadiah Watson. All rights reserved.
 //
 
-import Foundation
 import CloudKit
 
 class EntryController {
     
-    // Properties
-    static let sharedInstance = EntryController()
-    
+    //MARK: - Shared Instance and Source of Truth
+    static let shared = EntryController()
     var entries: [Entry] = []
-    
     let privateDB = CKContainer.default().privateCloudDatabase
-
-
-    func createEntry(with title: String, body: String, completion: @escaping (_ result: Result<Entry?, EntryError>) -> Void) {
-        let newEntry = Entry(title: title, body: body)
-        save(entry: newEntry, completion: completion)
-    }
-
-    // C.R.U.D. Methods
-    func save(entry: Entry, completion: @escaping (_ result: Result<Entry?, EntryError>) -> Void) {
-
+    
+    func createEntry(title: String, body: String, completion: @escaping (Result<Entry, EntryError>) -> Void) {
+        
+        let entry = Entry(title: title, body: body)
         let entryRecord = CKRecord(entry: entry)
-
+        
         privateDB.save(entryRecord) { (record, error) in
             if let error = error {
-                print("Error in \(#function) : \(error.localizedDescription) \n---\n \(error)")
-                completion(.failure(.ckError(error)))
-                return
+                print(error.localizedDescription + " --> \(error)")
+                completion(.failure(.thrown(error)))
             }
-            guard let record = record,
-            let savedEntry = Entry(ckRecord: record)
-                else { completion(.failure(.couldNotUnwrap)); return }
-            print("new Entry saved successfully")
-            self.entries.insert(savedEntry, at: 0)
-            completion(.success(savedEntry))
+            guard let record = record, let entry = Entry(ckRecord: record) else { return completion(.failure(.noData)) }
+            self.entries.insert(entry, at: 0)
+            completion(.success(entry))
         }
     }
     
-    func fetchEntriesWith(completion: @escaping (_ result: Result<[Entry]?,EntryError>) -> Void) {
+    func fetchEntries(completion: @escaping (Result<[Entry], EntryError>) -> Void) {
+        
         let predicate = NSPredicate(value: true)
-        let query = CKQuery(recordType: EntryConstants.recordTypeKey, predicate: predicate)
+        let query = CKQuery(recordType: EntryStrings.recordTypeKey, predicate: predicate)
+        
         privateDB.perform(query, inZoneWith: nil) { (records, error) in
             if let error = error {
-                print("Error in \(#function) : \(error.localizedDescription) \n---\n \(error)")
-                completion(.failure(.ckError(error)))
+                print(error.localizedDescription + " --> \(error)")
+                completion(.failure(.thrown(error)))
             }
-            guard let records = records else { completion(.failure(.couldNotUnwrap)); return }
-            print("Successfully fetched all Entries")
-            let entries = records.compactMap({ Entry(ckRecord: $0) })
+            
+            guard let records = records else { return completion(.failure(.noData))}
+            let entries: [Entry] = records.compactMap(Entry.init(ckRecord: ))
             self.entries = entries
             completion(.success(entries))
         }
+        
     }
-    
-}// End of Class
+}

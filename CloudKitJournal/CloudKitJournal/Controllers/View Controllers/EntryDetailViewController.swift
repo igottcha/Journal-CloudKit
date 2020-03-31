@@ -2,63 +2,70 @@
 //  EntryDetailViewController.swift
 //  CloudKitJournal
 //
-//  Created by Zebadiah Watson on 3/26/20.
+//  Created by Chris Gottfredson on 3/30/20.
 //  Copyright © 2020 Zebadiah Watson. All rights reserved.
 //
 
 import UIKit
 
-class EntryDetailViewController: UIViewController, UITextFieldDelegate {
+class EntryDetailViewController: UIViewController {
     
-    // MARK: - Outlets
+    //MARK: - Outlets and Properties
+    
     @IBOutlet weak var titleTextField: UITextField!
-    @IBOutlet weak var bodyTextField: UITextView!
+    @IBOutlet weak var bodyTextView: UITextView!
+    @IBOutlet weak var clearButton: UIButton!
     
-    // MARK: - Properties
     var entry: Entry? {
-        didSet {
+        didSet
+        {
             DispatchQueue.main.async {
-                self.loadViewIfNeeded()
                 self.updateViews()
             }
         }
     }
-
+    
+    //MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         updateViews()
-        titleTextField.delegate = self
     }
     
-    // MARK: - Actions
-    @IBAction func saveButtonTapped(_ sender: Any) {
-        guard let title = titleTextField.text, !title.isEmpty,
-            let body = bodyTextField.text, !body.isEmpty
-            else { return }
-
-
-        EntryController.sharedInstance.createEntry(with: title, body: body) { (result) in
+    //MARK: - Actions
+    
+    @IBAction func saveButtonTapped(_ sender: UIBarButtonItem) {
+        guard (entry == nil), let title = titleTextField.text, !title.isEmpty, let body = bodyTextView.text, !body.isEmpty else { return }
+        EntryController.shared.createEntry(title: title, body: body) { (results) in
             DispatchQueue.main.async {
-                self.navigationController?.popViewController(animated: true)
+                switch results {
+                case .success(_):
+                    self.navigationController?.popViewController(animated: true)
+                case .failure(let error):
+                    self.presentErrorToUser(localizedError: error)
+                }
             }
         }
     }
     
-    @IBAction func clearTextButtonTapped(_ sender: Any) {
+    @IBAction func clearButtonTapped(_ sender: Any) {
         titleTextField.text = ""
-        bodyTextField.text = ""
+        bodyTextView.text = ""
     }
     
-    // MARK: - Helper Functions
+    
+    //MARK: - Other Methods
+    
     func updateViews() {
         guard let entry = entry else { return }
-        titleTextField.text = entry.title
-        bodyTextField.text = entry.body
+        self.titleTextField.text = entry.title
+        self.bodyTextView.text = entry.body
     }
-    
+}
+
+extension EntryDetailViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        titleTextField.resignFirstResponder()
+        textField.resignFirstResponder()
         return true
     }
-    
-}// End of Class
+}
